@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudySphere - Your Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- LANDING PAGE -->
+    <div id="landing-page">
+        <!-- Floating Pill Navigation -->
+        <nav class="glass-nav pill-nav">
+            <div class="logo">
+                <i class="fa-solid fa-book-open"></i> StudySphere
+            </div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#" class="go-to-dashboard">Dashboard</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <button class="btn-light go-to-dashboard">Get Started</button>
+        </nav>
+
+        <!-- Hero Section (Matches image_198cb7.png) -->
+        <header class="hero">
+            <div class="hero-left">
+                <div class="badge">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Built for students, by students
+                </div>
+                <h1 class="hero-title">Study<br>Smarter,<br><span class="gradient-text">Not Harder.</span></h1>
+                <p class="hero-subtitle">Your all-in-one productivity dashboard for tasks, focus sessions, notes, and study analytics.</p>
+                <div class="hero-actions">
+                    <button class="btn-gradient go-to-dashboard">Start Organizing <i class="fa-solid fa-arrow-right"></i></button>
+                    <button class="btn-outline go-to-dashboard">Live Demo</button>
+                </div>
+                <div class="hero-footer-stats">
+                    <span><i class="fa-regular fa-star text-yellow"></i> 1000+ Students</span>
+                    <span><i class="fa-solid fa-fire text-orange"></i> Daily Productivity</span>
+                    <span><i class="fa-solid fa-chart-column text-cyan"></i> Analytics Powered</span>
+                </div>
+            </div>
+            
+            <div class="hero-right">
+                <div class="glass-card mockup-card">
+                    <div class="mockup-header">
+                        <span class="mockup-date">Tuesday, June 21</span>
+                        <div class="mockup-avatar">S</div>
+                    </div>
+                    <h2>Good Morning 👋</h2>
+                    <div class="mockup-grid">
+                        <div class="m-card">
+                            <i class="fa-regular fa-circle-check text-cyan"></i>
+                            <h3>3</h3>
+                            <p>Tasks Left</p>
+                        </div>
+                        <div class="m-card">
+                            <i class="fa-solid fa-fire text-orange"></i>
+                            <h3>5</h3>
+                            <p>Day Streak</p>
+                        </div>
+                        <div class="m-card">
+                            <i class="fa-solid fa-stopwatch text-purple"></i>
+                            <h3>2h</h3>
+                            <p>Focus Time</p>
+                        </div>
+                    </div>
+                    <div class="mockup-progress">
+                        <div class="mp-labels">
+                            <span>Daily Goal</span>
+                            <span>75%</span>
+                        </div>
+                        <div class="mp-bar-bg">
+                            <div class="mp-bar-fill" style="width: 75%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Features Section (Matches image_1989f3.png - Weather Replaced with Goals) -->
+        <section id="features" class="features-section">
+            <h2 class="section-title">Everything you need, <span class="gradient-text-cyan">in one place</span></h2>
+            <p class="section-subtitle">A complete toolkit designed to make your study sessions more focused and effective.</p>
+            
+            <div class="features-grid">
+                <div class="glass-card feature-card">
+                    <div class="f-icon-wrapper"><i class="fa-solid fa-clock"></i></div>
+                    <h3>Pomodoro Timer</h3>
+                    <p>Stay focused and beat procrastination.</p>
+                </div>
+                <div class="glass-card feature-card">
+                    <div class="f-icon-wrapper"><i class="fa-regular fa-file-lines"></i></div>
+                    <h3>Smart Notes</h3>
+                    <p>Quick notes saved automatically.</p>
+                </div>
+                <div class="glass-card feature-card">
+                    <div class="f-icon-wrapper"><i class="fa-solid fa-chart-simple"></i></div>
+                    <h3>Analytics</h3>
+                    <p>Visualize your study progress.</p>
+                </div>
+                <div class="glass-card feature-card">
+                    <div class="f-icon-wrapper"><i class="fa-solid fa-bullseye"></i></div>
+                    <h3>Goal Tracking</h3>
+                    <p>Set and achieve your daily targets.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why StudySphere (Matches image_1989cf.png) -->
+        <section class="why-section">
+            <h2 class="section-title">Why <span class="gradient-text-cyan">StudySphere</span></h2>
+            <p class="section-subtitle">A simple flow that builds lasting habits.</p>
+            
+            <div class="glass-card flow-card">
+                <div class="flow-step">
+                    <div class="flow-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                    <p>Open App</p>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-icon"><i class="fa-regular fa-circle-check"></i></div>
+                    <p>Add Tasks</p>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-icon"><i class="fa-regular fa-clock"></i></div>
+                    <p>Focus Session</p>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-icon"><i class="fa-solid fa-chart-line"></i></div>
+                    <p>Track Progress</p>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-icon"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                    <p>Achieve Goals</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats & Footer (Matches image_198994.png) -->
+        <section class="stats-section">
+            <div class="glass-card stats-card">
+                <div class="stat-item">
+                    <div class="s-icon"><i class="fa-solid fa-wrench"></i></div>
+                    <h2>10+</h2>
+                    <p>Productivity Tools</p>
+                </div>
+                <div class="stat-item">
+                    <div class="s-icon"><i class="fa-solid fa-bolt"></i></div>
+                    <h2>100%</h2>
+                    <p>Fast & Responsive</p>
+                </div>
+                <div class="stat-item">
+                    <div class="s-icon"><i class="fa-solid fa-hard-drive"></i></div>
+                    <h2>24/7</h2>
+                    <p>Offline Storage</p>
+                </div>
+                <div class="stat-item">
+                    <div class="s-icon"><i class="fa-solid fa-globe"></i></div>
+                    <h2>5+</h2>
+                    <p>APIs Powered</p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="glass-card footer-card">
+            <div class="footer-left">
+                <h3>StudySphere</h3>
+                <p>Made for Students ❤️</p>
+            </div>
+            <div class="footer-socials">
+                <a href="#"><i class="fa-brands fa-github"></i></a>
+                <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                <a href="#"><i class="fa-regular fa-envelope"></i></a>
+            </div>
+            <div class="footer-right">
+                <p>© 2026 StudySphere. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+
+    <!-- FUNCTIONAL DASHBOARD APP -->
+    <div id="dashboard-page" class="hidden">
+        
+        <nav class="glass-nav dashboard-nav">
+            <div class="logo cursor-pointer" id="back-to-home">
+                <i class="fa-solid fa-arrow-left"></i> StudySphere
+            </div>
+            <div class="nav-actions">
+                <span id="date-display" class="date-text"></span>
+                <div class="user-profile" id="user-greeting">👤 Student</div>
+            </div>
+        </nav>
+
+        <main class="dashboard-container">
+            <!-- Welcome Banner -->
+            <div class="glass-card banner">
+                <h2 id="greeting-msg">👋 Good Morning!</h2>
+                <p>Stay focused and crush your goals today.</p>
+                <div class="progress-wrapper">
+                    <span>Task Progress</span>
+                    <div class="progress-bar-container large">
+                        <div id="main-progress-bar" class="progress-bar gradient-bg" style="width: 0%"></div>
+                    </div>
+                    <span id="main-progress-text">0%</span>
+                </div>
+            </div>
+
+            <!-- Quick Stats Row (3 Cards since Weather is removed) -->
+            <div class="quick-stats three-cols">
+                <div class="glass-card stat-card">
+                    <i class="fa-solid fa-check-circle"></i> 
+                    <div><h4>Tasks Done</h4><p id="stat-tasks">0</p></div>
+                </div>
+                <div class="glass-card stat-card">
+                    <i class="fa-solid fa-list-ul"></i> 
+                    <div><h4>Total Tasks</h4><p id="stat-total-tasks">0</p></div>
+                </div>
+                <div class="glass-card stat-card">
+                    <i class="fa-solid fa-stopwatch"></i> 
+                    <div><h4>Focus Minutes</h4><p id="stat-focus">0m</p></div>
+                </div>
+            </div>
+
+            <!-- Main Interactive Grid -->
+            <div class="dashboard-grid">
+                
+                <!-- Task Manager -->
+                <div class="glass-card grid-item tasks">
+                    <h3><i class="fa-solid fa-list-check"></i> Today's Tasks</h3>
+                    <div class="input-group">
+                        <input type="text" id="new-task-input" placeholder="What needs to be done?">
+                        <button id="add-task-btn" class="icon-btn-small"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                    <ul id="task-list">
+                        <!-- Tasks inject here -->
+                    </ul>
+                </div>
+
+                <!-- Functional Pomodoro Timer -->
+                <div class="glass-card grid-item pomodoro">
+                    <h3><i class="fa-regular fa-clock"></i> Focus Timer</h3>
+                    <div class="timer-display" id="timer">25:00</div>
+                    <div class="timer-mode">
+                        <button class="mode-btn active" data-time="25">Work</button>
+                        <button class="mode-btn" data-time="5">Break</button>
+                    </div>
+                    <div class="timer-controls">
+                        <button id="start-timer" class="icon-btn"><i class="fa-solid fa-play"></i></button>
+                        <button id="pause-timer" class="icon-btn"><i class="fa-solid fa-pause"></i></button>
+                        <button id="reset-timer" class="icon-btn"><i class="fa-solid fa-rotate-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- Notes Manager -->
+                <div class="glass-card grid-item notes">
+                    <h3><i class="fa-regular fa-file-lines"></i> Quick Notes</h3>
+                    <div class="note-input-area">
+                        <input type="text" id="note-title" placeholder="Note Title">
+                        <textarea id="note-content" placeholder="Jot something down..." rows="2"></textarea>
+                        <button id="add-note-btn" class="btn-text">+ Save Note</button>
+                    </div>
+                    <div id="notes-container">
+                        <!-- Notes inject here -->
+                    </div>
+                </div>
+
+                <!-- Dynamic Quote -->
+                <div class="glass-card grid-item quote">
+                    <div class="quote-header">
+                        <h3><i class="fa-solid fa-quote-left"></i> Daily Motivation</h3>
+                        <i class="fa-solid fa-arrows-rotate refresh" id="refresh-quote"></i>
+                    </div>
+                    <div class="quote-content">
+                        <p id="quote-text">"The secret of getting ahead is getting started."</p>
+                        <small id="quote-author">- Mark Twain</small>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
