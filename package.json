@@ -1,0 +1,23 @@
+{
+  "name": "studysphere",
+  "version": "1.0.0",
+  "description": "Student Dahsboard\r  features:\r  1.timer\r  2.task manager",
+  "homepage": "https://github.com/raajithapalety-max/StudySphere#readme",
+  "bugs": {
+    "url": "https://github.com/raajithapalety-max/StudySphere/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raajithapalety-max/StudySphere.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
