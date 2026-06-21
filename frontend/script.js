@@ -1,77 +1,91 @@
-document.addEventListener('DOMContentLoaded', () => {
+// --- GLOBAL ROUTING ---
+window.switchView = function(viewId) {
+    const activeView = document.querySelector('.view.active');
+    const targetView = document.getElementById(viewId);
+    
+    if (!targetView || activeView === targetView) return;
 
-    // --- Navigation Routing ---
-    const landingPage = document.getElementById('landing-page');
-    const dashboardPage = document.getElementById('dashboard-page');
-    const goToDashboardBtns = document.querySelectorAll('.go-to-dashboard');
-    const backToHomeBtn = document.getElementById('back-to-home');
-
-    // Switch to Dashboard
-    goToDashboardBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            landingPage.style.opacity = '0';
-            landingPage.style.transition = 'opacity 0.4s ease';
+    if (activeView) {
+        activeView.style.opacity = '0';
+        setTimeout(() => {
+            activeView.classList.remove('active');
+            activeView.classList.add('hidden');
+            
+            targetView.classList.remove('hidden');
+            targetView.classList.add('active');
             
             setTimeout(() => {
-                landingPage.classList.add('hidden');
-                dashboardPage.classList.remove('hidden');
-                dashboardPage.style.opacity = '0';
-                setTimeout(() => {
-                    dashboardPage.style.transition = 'opacity 0.4s ease';
-                    dashboardPage.style.opacity = '1';
-                }, 50);
+                targetView.style.opacity = '1';
                 window.scrollTo(0, 0);
-            }, 400);
-        });
+            }, 50);
+        }, 300);
+    }
+
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        if (btn.getAttribute('data-view') === viewId) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
     });
 
-    // Go Back to Home
-    backToHomeBtn.addEventListener('click', () => {
-        dashboardPage.style.opacity = '0';
-        setTimeout(() => {
-            dashboardPage.classList.add('hidden');
-            landingPage.classList.remove('hidden');
-            landingPage.style.opacity = '1';
-            window.scrollTo(0, 0);
-        }, 400);
-    });
+    if(viewId === 'dashboard-page') {
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#3B82F6', '#8B5CF6', '#06B6D4'] });
+    }
+};
 
-    // --- State & Local Storage Initialization ---
-    let tasks = JSON.parse(localStorage.getItem('studySphere_tasks')) || [];
-    let notes = JSON.parse(localStorage.getItem('studySphere_notes')) || [];
-    let focusMinutes = parseInt(localStorage.getItem('studySphere_focus')) || 0;
+document.addEventListener('DOMContentLoaded', () => {
 
-    // --- Time, Date & Greetings ---
-    function updateDateAndGreeting() {
-        const now = new Date();
-        const dateOptions = { weekday: 'long', month: 'short', day: 'numeric' };
-        document.getElementById('date-display').textContent = now.toLocaleDateString('en-US', dateOptions);
+    function initWorkspace() {
+        const dateEl = document.getElementById('mockup-date');
+        if(dateEl) dateEl.textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
 
-        const hour = now.getHours();
+        const hour = new Date().getHours();
         let greeting = 'Good Evening';
         if (hour < 12) greeting = 'Good Morning';
         else if (hour < 18) greeting = 'Good Afternoon';
         
-        document.getElementById('greeting-msg').textContent = `👋 ${greeting}!`;
+        const msg = document.getElementById('greeting-msg');
+        if(msg) msg.textContent = `👋 ${greeting}!`;
+        
+        renderTasks();
+        renderNotes();
+        renderChart();
+        updateTimerDisplay();
     }
-    updateDateAndGreeting();
 
-    // --- Task Management ---
+    // ==========================================
+    // 1. TASK MANAGER
+    // ==========================================
+    let tasks = JSON.parse(localStorage.getItem('studySphere_tasks')) || [];
     const taskInput = document.getElementById('new-task-input');
     const taskList = document.getElementById('task-list');
-    
-    function saveTasks() {
-        localStorage.setItem('studySphere_tasks', JSON.stringify(tasks));
-        updateStats();
+
+    function updateStats() {
+        const total = tasks.length;
+        const completed = tasks.filter(t => t.completed).length;
+        const percentage = total === 0 ? 0 : Math.round((completed / total) * 100);
+
+        const tDone = document.getElementById('stat-tasks');
+        const tTotal = document.getElementById('stat-total-tasks');
+        const pBar = document.getElementById('main-progress-bar');
+        const pText = document.getElementById('main-progress-text');
+        
+        if(tDone) tDone.textContent = completed;
+        if(tTotal) tTotal.textContent = total;
+        if(pBar) pBar.style.width = `${percentage}%`;
+        if(pText) pText.textContent = `${percentage}%`;
+        
+        const fStat = document.getElementById('stat-focus');
+        if(fStat) fStat.textContent = `${parseInt(localStorage.getItem('studySphere_focus')) || 0}m`;
     }
 
     function renderTasks() {
+        if(!taskList) return;
         taskList.innerHTML = '';
         tasks.forEach((task, index) => {
             const li = document.createElement('li');
             if (task.completed) li.classList.add('task-completed');
-            
             li.innerHTML = `
                 <div class="task-left" onclick="toggleTask(${index})">
                     <input type="checkbox" ${task.completed ? 'checked' : ''} onclick="event.stopPropagation(); toggleTask(${index})">
@@ -84,41 +98,42 @@ document.addEventListener('DOMContentLoaded', () => {
         updateStats();
     }
 
-    document.getElementById('add-task-btn').addEventListener('click', addTask);
-    taskInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addTask(); });
+    const addTaskBtn = document.getElementById('add-task-btn');
+    if(addTaskBtn) {
+        addTaskBtn.addEventListener('click', addTask);
+        taskInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addTask(); });
+    }
 
     function addTask() {
         const text = taskInput.value.trim();
         if (text) {
             tasks.push({ text, completed: false });
+            localStorage.setItem('studySphere_tasks', JSON.stringify(tasks));
             taskInput.value = '';
-            saveTasks();
             renderTasks();
         }
     }
 
     window.toggleTask = function(index) {
         tasks[index].completed = !tasks[index].completed;
-        saveTasks();
+        localStorage.setItem('studySphere_tasks', JSON.stringify(tasks));
         renderTasks();
-    }
+    };
 
     window.deleteTask = function(index) {
         tasks.splice(index, 1);
-        saveTasks();
+        localStorage.setItem('studySphere_tasks', JSON.stringify(tasks));
         renderTasks();
-    }
+    };
 
-    // --- Notes Management ---
-    const noteTitle = document.getElementById('note-title');
-    const noteContent = document.getElementById('note-content');
+    // ==========================================
+    // 2. QUICK NOTES
+    // ==========================================
+    let notes = JSON.parse(localStorage.getItem('studySphere_notes')) || [];
     const notesContainer = document.getElementById('notes-container');
 
-    function saveNotes() {
-        localStorage.setItem('studySphere_notes', JSON.stringify(notes));
-    }
-
     function renderNotes() {
+        if(!notesContainer) return;
         notesContainer.innerHTML = '';
         notes.forEach((note, index) => {
             const div = document.createElement('div');
@@ -132,57 +147,63 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    document.getElementById('add-note-btn').addEventListener('click', () => {
-        const title = noteTitle.value.trim();
-        const content = noteContent.value.trim();
-        if (content) {
-            notes.unshift({ title, content }); 
-            noteTitle.value = '';
-            noteContent.value = '';
-            saveNotes();
-            renderNotes();
-        }
-    });
+    const addNoteBtn = document.getElementById('add-note-btn');
+    if(addNoteBtn) {
+        addNoteBtn.addEventListener('click', () => {
+            const title = document.getElementById('note-title').value.trim();
+            const content = document.getElementById('note-content').value.trim();
+            if (content) {
+                notes.unshift({ title, content }); 
+                localStorage.setItem('studySphere_notes', JSON.stringify(notes));
+                document.getElementById('note-title').value = '';
+                document.getElementById('note-content').value = '';
+                renderNotes();
+            }
+        });
+    }
 
     window.deleteNote = function(index) {
         notes.splice(index, 1);
-        saveNotes();
+        localStorage.setItem('studySphere_notes', JSON.stringify(notes));
         renderNotes();
+    };
+
+    // ==========================================
+    // 3. LIVE FOCUS TRACKER & POMODORO
+    // ==========================================
+    let weeklyStudyData = JSON.parse(localStorage.getItem('studySphere_weekly')) || [0, 0, 0, 0, 0, 0, 0];
+    
+    function renderChart() {
+        const chartArea = document.getElementById('study-chart');
+        if (!chartArea) return;
+        chartArea.innerHTML = '';
+        const MAX_MINUTES = 480;
+
+        weeklyStudyData.forEach(minutes => {
+            const heightPercent = Math.min((minutes / MAX_MINUTES) * 100, 100);
+            const hours = (minutes / 60).toFixed(1);
+            const barContainer = document.createElement('div');
+            barContainer.className = 'bar-container';
+            barContainer.innerHTML = `<div class="bar" style="height: ${heightPercent}%" title="${hours} hrs"></div>`;
+            chartArea.appendChild(barContainer);
+        });
     }
 
-    // --- Dashboard Stats ---
-    function updateStats() {
-        const total = tasks.length;
-        const completed = tasks.filter(t => t.completed).length;
-        const percentage = total === 0 ? 0 : Math.round((completed / total) * 100);
-
-        document.getElementById('stat-tasks').textContent = completed;
-        document.getElementById('stat-total-tasks').textContent = total;
-        document.getElementById('main-progress-bar').style.width = `${percentage}%`;
-        document.getElementById('main-progress-text').textContent = `${percentage}%`;
-        document.getElementById('stat-focus').textContent = `${focusMinutes}m`;
-    }
-
-    // --- Pomodoro Timer ---
     let timerInterval;
     let currentMode = 25; 
     let timeLeft = currentMode * 60;
     let isRunning = false;
+    let focusMinutes = parseInt(localStorage.getItem('studySphere_focus')) || 0;
+    let sessionElapsedSeconds = 0; 
 
     const timerDisplay = document.getElementById('timer');
     const modeBtns = document.querySelectorAll('.mode-btn');
 
     function updateTimerDisplay() {
-        const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
-        const s = (timeLeft % 60).toString().padStart(2, '0');
-        timerDisplay.textContent = `${m}:${s}`;
-        
-        // Update document title only if on dashboard page
-        if(!document.getElementById('dashboard-page').classList.contains('hidden')){
-            document.title = `${m}:${s} - Focus Mode`;
-        } else {
-            document.title = "StudySphere - Your Hub";
-        }
+        if(!timerDisplay) return;
+        const min = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+        const sec = (timeLeft % 60).toString().padStart(2, '0');
+        timerDisplay.textContent = `${min}:${sec}`;
     }
 
     modeBtns.forEach(btn => {
@@ -192,74 +213,91 @@ document.addEventListener('DOMContentLoaded', () => {
             e.target.classList.add('active');
             currentMode = parseInt(e.target.getAttribute('data-time'));
             timeLeft = currentMode * 60;
+            sessionElapsedSeconds = 0;
             updateTimerDisplay();
         });
     });
 
-    document.getElementById('start-timer').addEventListener('click', () => {
-        if (!isRunning) {
-            isRunning = true;
-            timerInterval = setInterval(() => {
-                if (timeLeft > 0) {
-                    timeLeft--;
-                    updateTimerDisplay();
-                } else {
-                    clearInterval(timerInterval);
-                    isRunning = false;
-                    
-                    if (currentMode === 25) {
-                        focusMinutes += 25;
-                        localStorage.setItem('studySphere_focus', focusMinutes);
-                        updateStats();
-                        alert("Focus session complete! Great job. Take a short break.");
+    const startTimerBtn = document.getElementById('start-timer');
+    if(startTimerBtn) {
+        startTimerBtn.addEventListener('click', () => {
+            if (!isRunning) {
+                isRunning = true;
+                timerInterval = setInterval(() => {
+                    if (timeLeft > 0) {
+                        timeLeft--;
+                        
+                        // LIVE UPDATE GRAPH: Every 60 seconds, add a minute to the graph
+                        if (currentMode === 25) {
+                            sessionElapsedSeconds++;
+                            if (sessionElapsedSeconds >= 60) {
+                                focusMinutes += 1;
+                                localStorage.setItem('studySphere_focus', focusMinutes);
+                                
+                                const dayIndex = new Date().getDay() === 0 ? 6 : new Date().getDay() - 1; 
+                                weeklyStudyData[dayIndex] += 1;
+                                localStorage.setItem('studySphere_weekly', JSON.stringify(weeklyStudyData));
+                                
+                                sessionElapsedSeconds = 0;
+                                updateStats();
+                                renderChart();
+                            }
+                        }
+
+                        updateTimerDisplay();
                     } else {
-                        alert("Break is over! Ready to focus again?");
+                        clearInterval(timerInterval);
+                        isRunning = false;
+                        sessionElapsedSeconds = 0;
+                        
+                        if (currentMode === 25) {
+                            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }});
+                            alert("Focus session complete! Take a break.");
+                        } else {
+                            alert("Break is over! Time to focus.");
+                        }
+                        timeLeft = currentMode * 60;
+                        updateTimerDisplay();
                     }
-                    timeLeft = currentMode * 60;
-                    updateTimerDisplay();
-                }
-            }, 1000);
-        }
-    });
-
-    document.getElementById('pause-timer').addEventListener('click', () => {
-        clearInterval(timerInterval);
-        isRunning = false;
-    });
-
-    document.getElementById('reset-timer').addEventListener('click', () => {
-        clearInterval(timerInterval);
-        isRunning = false;
-        timeLeft = currentMode * 60;
-        updateTimerDisplay();
-    });
-
-    // --- Dynamic Quotes ---
-    const quotes = [
-        { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
-        { text: "It always seems impossible until it's done.", author: "Nelson Mandela" },
-        { text: "Don't watch the clock; do what it does. Keep going.", author: "Sam Levenson" },
-        { text: "Quality is not an act, it is a habit.", author: "Aristotle" },
-        { text: "The future depends on what you do today.", author: "Mahatma Gandhi" },
-        { text: "There are no shortcuts to any place worth going.", author: "Beverly Sills" }
-    ];
-
-    function updateQuote() {
-        const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-        document.getElementById('quote-text').textContent = `"${randomQuote.text}"`;
-        document.getElementById('quote-author').textContent = `- ${randomQuote.author}`;
+                }, 1000);
+            }
+        });
     }
-    
-    document.getElementById('refresh-quote').addEventListener('click', () => {
-        const icon = document.getElementById('refresh-quote');
-        icon.style.transform = 'rotate(180deg)';
-        setTimeout(() => icon.style.transform = 'none', 300);
-        updateQuote();
-    });
 
-    // --- Initialization Calls ---
-    renderTasks();
-    renderNotes();
-    updateTimerDisplay();
-    updateQuote();
+    const pauseTimerBtn = document.getElementById('pause-timer');
+    if(pauseTimerBtn) pauseTimerBtn.addEventListener('click', () => { 
+        clearInterval(timerInterval); 
+        isRunning = false; 
+    });
+    
+    const resetTimerBtn = document.getElementById('reset-timer');
+    if(resetTimerBtn) {
+        resetTimerBtn.addEventListener('click', () => {
+            clearInterval(timerInterval);
+            isRunning = false;
+            timeLeft = currentMode * 60;
+            sessionElapsedSeconds = 0; 
+            updateTimerDisplay();
+        });
+    }
+
+    // ==========================================
+    // 4. DAILY MOTIVATION
+    // ==========================================
+    const refreshQuoteBtn = document.getElementById('refresh-quote');
+    if(refreshQuoteBtn) {
+        const quotes = [
+            { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
+            { text: "It always seems impossible until it's done.", author: "Nelson Mandela" },
+            { text: "Quality is not an act, it is a habit.", author: "Aristotle" },
+            { text: "Success is the sum of small efforts, repeated day-in and day-out.", author: "Robert Collier" }
+        ];
+        refreshQuoteBtn.addEventListener('click', () => {
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('quote-text').textContent = `"${randomQuote.text}"`;
+            document.getElementById('quote-author').textContent = `- ${randomQuote.author}`;
+        });
+    }
+
+    initWorkspace();
 });
